@@ -1,0 +1,40 @@
+import React, { useState, useEffect } from 'react';
+
+function WeatherApp() {
+  const [location, setLocation] = useState('');
+  const [weatherData, setWeatherData] = useState(null);
+
+  useEffect(() => {
+    // Fetch weather data based on location
+    const fetchWeather = async () => {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=YOUR_API_KEY`
+      );
+      const data = await response.json();
+      setWeatherData(data);
+    };
+
+    if (location) {
+      fetchWeather();
+    }
+  }, [location]);
+
+  const handleLocationChange = (event) => {
+    setLocation(event.target.value);
+  };
+
+  return (
+    <div>
+      <input type="text" value={location} onChange={handleLocationChange} />
+      {weatherData && (
+        <div>
+          <h1>{weatherData.name}</h1>
+          <p>Temperature: {weatherData.main.temp} K</p>
+          {/* Display other weather details */}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default WeatherApp;
